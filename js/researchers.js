@@ -1,6 +1,8 @@
 window.onload = function () {
-    let requestURL = "https://sdat-dev.github.io/resources/wiser/data/researchers.json"; 
-    let datarequestURL = "https://sdat-dev.github.io/resources/wiser/data/researchersdata.json"; 
+    let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/researchers.json"; 
+    let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/researchersdata.json"; 
+    // let requestURL = "../data/researchers.json"; 
+    // let datarequestURL = "../data/researchersdata.json"; 
     let request =  axios.get(requestURL);
     let datarequest =  axios.get(datarequestURL);
     let maincontentContainer = document.getElementsByClassName('main-content')[0];
@@ -12,7 +14,7 @@ window.onload = function () {
         content += '<input id = "search-box" placeholder = "Search Researchers...">'+
                     '<button id = "search-button" type = "submit"><i class="fa fa-search"></i></button>'+
                 '<br><span id = "search-box-results"></span>';
-        content +='<div id="experts-content">'+buildResearchersContent(researchers)+'</div>';
+        content +='<div id="experts-content">'+ buildUniversityResearchers("tab1",researchers)+'</div>';
         let contentElement = document.createElement('div');
         contentElement.classList.add('content');
         contentElement.innerHTML = content.trim();
@@ -28,41 +30,6 @@ window.onload = function () {
     })
 }
 
-let buildResearchersContent = function(experts){
-    let content = '';
-    let universityResearchers = experts.filter(function(expert){
-        return (expert["UniversityInstitution"] == "UAlbany") || (expert["UniversityInstitution"] == "UConn");
-    });
-    let otherResearchers = experts.filter(function(expert){
-        return (expert["UniversityInstitution"] != "UAlbany") && (expert["UniversityInstitution"] != "UConn");
-    });
-    let tabattribute = "UniversityInstitution"
-    let distincttabs = getDistinctAttributes(universityResearchers, 'UniversityInstitution'); 
-    distincttabs.push("Other Organizations");
-    content = createTabNavigation(distincttabs, tabattribute);
-    let tabContent = [];
-    for(let i = 0; i< distincttabs.length; i++){
-        let tabexperts = universityResearchers.filter(function(expert){
-            return expert.UniversityInstitution == distincttabs[i];
-        });
-        let tabId = "";
-        if(distincttabs[i] != "Other Organizations")
-        {
-            tabId = tabattribute + i.toString();
-            tabContent.push(buildUniversityResearchers(tabId, tabexperts));
-        }
-        else
-        {
-            tabId = tabattribute + i.toString();
-            tabContent.push(buildOtherResearchers(tabId, otherResearchers));
-        }
-        
-    }
-
-    content += buildTabContent(distincttabs, tabattribute, tabContent);
-    return content;
-}
-
 //Start with level1 accordion and build one by one the levels going down.
 //this is nestted accordion that can go upto 4 levels
 let counter = 1;
@@ -70,9 +37,7 @@ let buildUniversityResearchers = function(tabId, tabexperts){
     let contactElem = '';
     contactElem +=  '<div class = "accordion-container">'+
                         '<div class="panel-group" id = "' + tabId + '" role="tablist" aria-multiselectable="true">';
-    let distinctLevel1s = tabexperts[0].UniversityInstitution == "UAlbany"? 
-                        getDistinctAttributes(tabexperts, 'UAlbanyCollegeSchoolDivision'):
-                        getDistinctAttributes(tabexperts, 'UConnCollegeSchool');
+    let distinctLevel1s = getDistinctAttributes(tabexperts, 'UAlbanyCollegeSchoolDivision');
     distinctLevel1s.sort();
     var index = distinctLevel1s.indexOf("");
     if(index != -1)
@@ -88,18 +53,17 @@ let buildUniversityResearchers = function(tabId, tabexperts){
         let level2Elem = '';
         //filter level2s
         let level2s = tabexperts.filter(function(expert){
-            return expert.UniversityInstitution == "UAlbany"? expert.UAlbanyCollegeSchoolDivision == level1 :
-            expert.UConnCollegeSchool == level1;
+            return expert.UAlbanyCollegeSchoolDivision == level1;
         }); 
 
         if(level2s.length > 0)
         {
-            let distinctLevel2s = getDistinctAttributes(level2s, 'DepartmentUnitOffice');
+            let distinctLevel2s = getDistinctAttributes(level2s, 'Department');
             distinctLevel2s.sort();
             distinctLevel2s.forEach(function(level2){
                 //filter level3 
                 let level3s = level2s.filter(function(expert){
-                    return expert.DepartmentUnitOffice == level2;
+                    return expert.Department == level2;
                 });
                 level3s.sort((a,b) => b.firstName - a.firstName)
                 //for level2s build simple list
@@ -110,6 +74,7 @@ let buildUniversityResearchers = function(tabId, tabexperts){
         {
             level1 = "Other";
         }
+        level1 += '<span class="noofresearchers"></span>';
         contactElem+= generateAccordionElem(1, collapseId1, headerId1, tabId, childId1, level1, level2Elem);
     });
     contactElem +=      '</div>'+
@@ -125,9 +90,9 @@ let buildUniversityResearcherElements = function(researchers){
             continue;
         let researcher = researchers[i];
         content +='<div class = "search-container expert-info">'+
-        '<img class = "expert-image" src = "https://sdat-dev.github.io/resources/wiser/assets/images/researchers/' + researcher.Photo +'"/>'+
-        '<h2 class = "content-header-no-margin">'+ (researcher["UniversityInstitutionalPage"] == ""? researcher.FirstName + ' '+ researcher.LastName : '<a class = "no-link-decoration" href = ' + getHttpLink(researcher["UniversityInstitutionalPage"]) + '>' + researcher.FirstName + ' '+ researcher.LastName + '</a>') + '</h2>'+
-        '<h5 class = "content-header-no-margin faculty-title" style = "font-size:20px;">'+ (researcher.JobTitle != ''? researcher.JobTitle + ',<br>':'') + (researcher.DepartmentUnitOffice != ''? researcher.DepartmentUnitOffice :'') + '</h5>' +
+        '<img class = "expert-image" src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/researchers/' + researcher.Photopath +'"/>'+
+        '<h2 class = "content-header-no-margin">'+ (researcher["InstitutionalPage"] == ""? researcher.FirstName + ' '+ researcher.LastName : '<a class = "no-link-decoration" href = ' + getHttpLink(researcher["InstitutionalPage"]) + '>' + researcher.FirstName + ' '+ researcher.LastName + '</a>') + '</h2>'+
+        '<h5 class = "content-header-no-margin faculty-title" style = "font-size:20px;">'+ (researcher.JobTitle != ''? researcher.JobTitle + ',<br>':'') + (researcher.Department != ''? researcher.Department :'') + '</h5>' +
         generateLogoContent(researcher) +'<p class = "faculty-description"><strong>Email: </strong> <a class = "email-link" href = mailto:' + researcher.Email + 
         '>'+ researcher.Email+ '</a><br>'+ (researcher.PhoneNumber != ""? '<strong>Phone: </strong>'+ formatPhone(researcher.PhoneNumber) + '<br>': "")+'<strong>Research Interests: </strong>'+ 
         getResearchInterests(researcher) + '</p><p>' + researcher.ResearchExpertise +'</p>'+ generateProjectsContent([researcher["Project1"],researcher["Project2"],researcher["Project3"],researcher["Project4"],researcher["Project5"]])+
@@ -136,105 +101,15 @@ let buildUniversityResearcherElements = function(researchers){
     return content;
 }
 
-let buildOtherResearchers = function(tabId, tabresearchers){
-    let contactElem = '';
-    contactElem += '<div class="panel-group" id = "' + tabId + '" role="tablist" aria-multiselectable="true">';
-    let distinctLevel1s = getDistinctOrganizations(tabresearchers);
-    distinctLevel1s.sort();
-    var index = distinctLevel1s.indexOf("");
-    if(index != -1)
-    {
-        distinctLevel1s.splice(index, 1);
-        distinctLevel1s.push("");
-    }
-    
-    distinctLevel1s.forEach(function(level1) {
-        let collapseId1 = "collapse" + counter;
-        let headerId1 = "heading" + counter;
-        let childId1 = "child" + counter;
-        counter++;
-        let level2Elem = '';
-        //filter level2s
-        let level2s = tabresearchers.filter(function(researcher){
-            return (researcher.UniversityInstitution == "") ? "Other" == level1 : 
-                                                               researcher.UniversityInstitution == level1;
-        }); 
-        if(level2s.length > 0)
-        {
-            let distinctLevel2s = getDistinctDivisions(level2s);
-            distinctLevel2s.sort();
-            distinctLevel2s.forEach(function(level2){
-                //filter level3 
-                let level3s = level2s.filter(function(researcher){
-                    return (researcher["DepartmentUnitOffice"] == "") ? "Other" : researcher.DepartmentUnitOffice == level2;
-                });
-                level3s.sort((a,b) => b.firstName - a.firstName)
-                //for level2s build simple list
-                level2Elem+= buildOtherResearcherElements(level3s);
-            });
-        } 
-
-        if(level1 == "")
-        {
-            level1 = "Other";
-        }
-
-        contactElem+= generateAccordionElem(1, collapseId1, headerId1, tabId, childId1, level1, level2Elem);
-    });
-    contactElem += '</div>';
-    //end level1 accordion
-    return contactElem;
-}
-
-let getDistinctOrganizations = function(researchers){
-    let mappedAttributes = researchers.map(function(researcher){
-        return  (researcher["UniversityInstitution"] == "") ? "Other" : researcher["UniversityInstitution"];
-    });
-    let distinctOrganizations = mappedAttributes.filter(function(v, i, a){
-        return a.indexOf(v) === i;
-     });
-
-    return distinctOrganizations;
-}
-
-let getDistinctDivisions = function(researchers){
-    let mappedAttributes = researchers.map(function(researcher){
-        return  (researcher.DepartmentUnitOffice == "") ? "Other" : researcher.DepartmentUnitOffice;
-    });
-    let distinctDivisions = mappedAttributes.filter(function(v, i, a){
-        return a.indexOf(v) === i;
-     });
-
-    return distinctDivisions;
-}
-
-let buildOtherResearcherElements = function(researchers){
-    let content = '';
-    for(var i=0; i< researchers.length; i++){
-        if(researchers[i].FirstName == "") //skip of there is no first name
-            continue;
-        let researcher = researchers[i];
-        content +='<div class = "search-container expert-info">'+
-        '<img class = "expert-image" src = "https://sdat-dev.github.io/resources/wiser/assets/images/researchers/' + researcher.Photo +'"/>'+
-        '<h2 class = "content-header-no-margin">'+ (researcher["UniversityInstitutionalPage"] == ""? researcher.FirstName + ' '+ researcher.LastName : '<a class = "no-link-decoration" href = ' + getHttpLink(researcher["UniversityInstitutionalPage"]) + '>' + researcher.FirstName + ' '+ researcher.LastName + '</a>') + '</h2>'+
-        '<h5 class = "content-header-no-margin faculty-title" style = "font-size:20px;">'+ (researcher.JobTitle != ''? researcher.JobTitle + ',<br>':'') + (researcher.DepartmentUnitOffice != ''? researcher.DepartmentUnitOffice :'') + '</h5>' +
-        generateLogoContent(researcher) +'<p class = "faculty-description"><strong>Email: </strong> <a class = "email-link" href = mailto:' + researcher.Email + 
-        '>'+ researcher.Email + '</a><br>'+ (researcher.PhoneNumber != ""? '<strong>Phone: </strong>'+ formatPhone(researcher.PhoneNumber) + '<br>': "")+'<strong>Research Interests: </strong>'+ 
-        getResearchInterests(researcher) + '</p><p>' + researcher.ResearchExpertise +'</p>'+ generateProjectsContent([researcher["Project1"],researcher["Project2"],researcher["Project3"],researcher["Project4"],researcher["Project5"]])+
-        generateRelevantCourses([researcher["Course1"],researcher["Course2"],researcher["Course3"],researcher["Course4"],researcher["Course5"]])+ '</div>';;
-   }
-    return content;
-}
-
 let generateLogoContent = function(expert){
     let onlineCVContent = (expert["CV"] == '')?'':
-    '<a href = "'+ expert["CV"] +'"><img src = "https://sdat-dev.github.io/resources/wiser/assets/images/cv.png"></a>'; 
+    '<a href = "'+ expert["CV"] +'"><img src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/cv.png"></a>'; 
     let researchGateContent = (expert["ResearchGate"]== '')?'':
-    '<a href = "'+ expert["ResearchGate"] +'"><img src = "https://sdat-dev.github.io/resources/wiser/assets/images/research-gate-logo.png"></a>'; 
+    '<a href = "'+ expert["ResearchGate"] +'"><img src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/research-gate-logo.png"></a>'; 
     let googleScholarContent = (expert["GoogleScholar"] == '')?'':
-    '<a href = "'+ expert["GoogleScholar"] +'"><img src = "https://sdat-dev.github.io/resources/wiser/assets/images/google-scholar-logo.png"></a>'; 
+    '<a href = "'+ expert["GoogleScholar"] +'"><img src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/google-scholar-logo.png"></a>'; 
     let otherContent = (expert["Others"] == '')?'':
-    '<a href = "'+ expert["Others"] +'"><img src = "https://sdat-dev.github.io/resources/wiser/assets/images/link.png"></a>'; 
+    '<a href = "'+ expert["Others"] +'"><img src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/link.png"></a>'; 
     let linkContainer = '<div class = "display-flex icon-container">'+
     onlineCVContent + researchGateContent + googleScholarContent + otherContent + '</div>';
     return linkContainer;
@@ -283,12 +158,12 @@ let generateRelevantCourses = function(courses){
     return courseContent;
 }
 
-//Search Function
+// Search Function
 searchfunction = function () {
     //getting search-box Element
     let searchbox = document.getElementById('search-box');
     let searchtext = searchbox.value.trim();
-    let tabs =  document.getElementsByClassName('tab-pane');
+    //let tabs =  document.getElementsByClassName('tab-pane');
     //getting individual content withing sub-accordions to toggle display
     let panels = document.getElementsByClassName('panel');
     let searchElems = document.getElementsByClassName('search-container');
@@ -309,22 +184,22 @@ searchfunction = function () {
     {
         let modifiedsearchtext = searchtext.replace(/\s+/g, '').toLowerCase();
 
-        for(let i=0; i < tabs.length; i++){
-            let tabpanels = tabs[i].getElementsByClassName('panel');
+        
+        for(let i=0; i< panels.length; i++){
             let count = 0;
-            for(let j=0; j< tabpanels.length; j++){
-                let searchElems = tabpanels[j].getElementsByClassName('search-container');
-                for (let k = 0; k < searchElems.length; k++) {
-                    if (searchElems[k].textContent.replace(/\s+/g, '').toLowerCase().indexOf(modifiedsearchtext) >= 0) {
-                        count++;
-                        searchElems[k].style.display = "block";
-                        tabpanels[j].style.display = "block";
-                    }
+            let searchElems = panels[i].getElementsByClassName('search-container');
+            for (let j = 0; j < searchElems.length; j++) {
+                if (searchElems[j].textContent.replace(/\s+/g, '').toLowerCase().indexOf(modifiedsearchtext) >= 0) {
+                    count++;
+                    searchElems[j].style.display = "block";
                 }
             }
-            let tabid = tabs[i].getAttribute("Id");
-            let tabpill = document.getElementById('#'+tabid);
-            tabpill.innerText = tabpill.innerText + ' (' + count + ')';
+            if(count > 0)
+            {
+                let solicount = panels[i].getElementsByClassName("noofresearchers");
+                solicount[0].innerText = " ("+count+")";
+                panels[i].style.display = "block";
+            }
         }
     }
     else{
@@ -333,30 +208,20 @@ searchfunction = function () {
     } 
 }
 
-let clearsearch = function(){
-    let tabs =  document.getElementsByClassName('tab-pane');
-    let panels = document.getElementsByClassName('panel');
-    let searchElems = document.getElementsByClassName('search-container');
-    for(let i=0; i < tabs.length; i++){
-        let tabid = tabs[i].getAttribute("Id");
-        let tabpill = document.getElementById('#'+tabid);
-        let tabtext = tabpill.innerText;
-        let pos = tabtext.indexOf("(");
-        if(pos != -1)
-        {
-            tabpill.innerText = tabtext.substring(0, pos-1);
-        }
-    }
 
+let clearsearch = function(){
+    let panels = document.getElementsByClassName('panel');
     if (panels.length > 0) {
         for (let i = 0; i < panels.length; i++) {
+            let searchElems = panels[i].getElementsByClassName('search-container');
+            if (searchElems.length > 0) {
+                for (let i = 0; i < searchElems.length; i++) {
+                    searchElems[i].style.display = "block";
+                }
+            }
+            let solicount = panels[i].getElementsByClassName("noofresearchers");
+            solicount[0].innerText = "";
             panels[i].style.display = "block";
-        }
-    }
-
-    if (searchElems.length > 0) {
-        for (let i = 0; i < searchElems.length; i++) {
-            searchElems[i].style.display = "block";
         }
     }
 }
