@@ -1,4 +1,4 @@
-let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/fundingopportunity.json";
+let requestURL = "https://sdat-dev.github.io/resources/wecliemprep/data/fundingopportunity.json";
 let request = new XMLHttpRequest();
 //getting content Element to append grants information
 let maincontentContainer = document.getElementsByClassName('main-content')[0];
@@ -360,7 +360,10 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
                 img_url = "assets/logos-funding-opportunities/SPIN_logo.png";
             }
         }
-        var description = arr[i].synopsis.replace(/<[^>]*>/g, '');
+        var description = '';
+        if(arr[i].synopsis != null){
+            var description = arr[i].synopsis.replace(/<[^>]*>/g, '');
+        }
         if (dueDate != "Continuous Submission/Contact the Program Officer") {
             if (Date.parse(dueDate) > Date.parse(today)) {
                 flag = true;
@@ -379,7 +382,7 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
                 '<br>' +
                 '</div><div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
                 '<i class="fas fa-calendar-day"></i> <strong>Date: </strong>' + dueDate +
-                '<br></div></div></div>' +
+                '<br></div></div></div><br><br><br><br><br><br>' +
                 '<p class = "opp-description">' + description + '</p>';
             if (arr[i].deadline_note != null) {
                 content += buildduedatenote(arr[i].deadline_note);

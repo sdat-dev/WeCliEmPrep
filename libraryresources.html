@@ -9,18 +9,23 @@
     <link rel="shortcut icon" href="https://www.albany.edu/sites/default/files/favicon_0.ico"
         type="image/vnd.microsoft.icon">
     <title>WEATHER, CLIMATE &amp; EMERGENCY PREPAREDNESS |University at Albany</title>
+    <link rel="stylesheet" media="all" href="themes/ualbany/css_HGX-k5WjVd363YMi3gQopTOOpp5Kgp6wjKjySmE1uJI.css"/>
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/healthequity/themes/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/libraries/css/bootstrap/css/bootstrap-grid.min.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/libraries/css/bootstrap/css/bootstrap-reboot.min.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/libraries/css/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/common.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/top-menu.css"/>
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/side-navigation.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/custom-fonts.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/footer.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/header.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/libraryresource.css" />
-    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep-dev/themes/accordion-transparent-theme.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/healthequity/themes/bootstrap/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/healthequity/themes/bootstrap/css/bootstrap-reboot.min.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/healthequity/themes/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" media="all" href="themes/ualbany/albany-ext-base.css"/>
+    <link rel="stylesheet" media="all" href="themes/ualbany/albany-ext-responsive.css"/>
+    <link rel="stylesheet" media="all" href="themes/ualbany/css_q036XDr9SVMAATDFeF7n144oqvCLSigD02M0HlYgVt0.css"/> 
+    <link rel="stylesheet" href="themes/common.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/top-menu.css"/>
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/side-navigation.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/custom-fonts.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/footer.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/header.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/libraryresource.css" />
+    <link rel="stylesheet" href="https://sdat-dev.github.io/resources/wecliemprep/themes/accordion-transparent-theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -39,6 +44,16 @@
             <div class="col-xs12 col-sm-3" style="padding-left: 31px; font-size: 21px; padding-bottom: 60px;">
                 <div id="side-menu">
                 </div>
+                <div class="dropdown top-nav" >
+                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Site Navigation
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div id="side-menu2">
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="main-content col-xs-12 col-sm-9" style="line-height: 1.45;">
                 <h1 class="content-header">
@@ -48,13 +63,21 @@
     </section>
     <footer id="footer">
     </footer>
+    
+    <script src="js/topheader.js"></script>
+    <script src="js/footer.js"></script>
     <script src="https://sdat-dev.github.io/resources/libraries/js/jquery/jquery.min.js"></script>
     <script src="https://sdat-dev.github.io/resources/libraries/js/misc/drupal.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://sdat-dev.github.io/resources/libraries/js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/topheader.js"></script>
     <script src="js/common.js"></script>
-    <script src="https://sdat-dev.github.io/resources/libraries/js/ualbany/albany.js"></script><script>addsidemenu("Library Resources")</script>
-	<script src="js/libraryresources.js"></script></body>
+    <script src="https://sdat-dev.github.io/resources/libraries/js/ualbany/albany.js"></script>
+	<script>addsidemenu("Library Resources")</script>
+	<script>addsidemenu2("Library Resources")</script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="libraries/misc/drupal.init.js"></script>
+    <script src="libraries/jquery/drawer.min.js"></script>
+    <script src="libraries/ualbany/pushmenu.js"></script>
+	<script src="libraries/ualbany/iscroll-new.js"></script>
+	<script src="js/libraryresources.js"></script>
 </html>
