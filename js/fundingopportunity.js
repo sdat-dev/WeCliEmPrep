@@ -383,7 +383,7 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
                 '<br>' +
                 '</div><div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
                 '<i class="fas fa-calendar-day"></i> <strong>Date: </strong>' + dueDate +
-                '<br></div></div></div><br><br><br><br><br><br>' +
+                '<br></div></div></div><br><br><br><br><br><br><br>' +
                 '<p class = "opp-description">' + description + '</p>';
             if (arr[i].deadline_note != null) {
                 content += buildduedatenote(arr[i].deadline_note);
@@ -391,7 +391,7 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
             if(arr[i].programurl != null){
                 content += '<p class="width100" style="padding-left: 15px;"><button type = "button" class = "details-button" onclick = "window.open(\'' + arr[i].programurl + '\',\'_blank\')">View Details</button></p></div>';
             }else{
-                content += '</div>';
+                content += '<p class="width100"><button type = "button" class = "details-button" onclick = "window.open(\'https://spin.infoedglobal.com/Program.html?' + arr[i].id + '\',\'_blank\')">View Details</button></p></div>';
             }
         }
     }
